@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
-	"strconv"
 )
 
 /*Напишите HTTP-сервис, который принимает входящие соединения с JSON-данными и обрабатывает их следующим образом:
@@ -23,20 +22,28 @@ type User struct {
 func (u *User) toString() string {
 	return fmt.Sprintf("name is %s and age is %d and friends %v \n", u.Name, u.Age, u.Friends)
 }
-type service struct {
-	i int
+type Service struct {
+	Id int `json:"Id"`
 	store map [int] *User
 }
-
+//пробую  добавлять карту в сервис через отдельный метод
+func (s *Service) GetMap(u *User)  {
+	for {
+		s.Id++
+		s.store[s.Id] = u
+		fmt.Printf("Запись %v произведена \n", s.Id)
+		return
+	}
+}
 func main()  {
 	mux := http.NewServeMux()
-	srv := service{i: int(1), store: map[int]*User{}}
+	srv := Service{store: map[int]*User{}}
 	mux.HandleFunc("/create", srv.Create)
 //	mux.HandleFunc("/get", srv.GetAll	)
 	http.ListenAndServe("localhost:8080", mux)
 }
 
-func (s *service)  Create (w http.ResponseWriter, r *http.Request)  {
+func (s *Service)  Create (w http.ResponseWriter, r *http.Request)  {
 	if r.Method == "POST" {
 		content, err := ioutil.ReadAll(r.Body) // берем и считываем body (информацию с rest запроса) и заносим в переменную content (срез байтов)
 		if err != nil {
@@ -53,15 +60,21 @@ func (s *service)  Create (w http.ResponseWriter, r *http.Request)  {
 			w.Write([]byte(err.Error()))
 			return
 		}
-		s.store[s.i] = &u // записывает в мапу с ключом = имени из данных пользователя и присваивает данному ключу полученные данные
-
+		//добавил метод обработки добавления структуры пользователя в мапу
+		s.GetMap(&u)
 		w.WriteHeader(http.StatusCreated)
-		w.Write([]byte("пользователь " + u.Name + " зарегистрирован под номером " + strconv.Itoa(s.i))) // отправляем в POST информацию, что всё прошло ок
+		//w.Write([]byte("пользователь " + u.Name + " зарегистрирован под номером " + strconv.Itoa(s.Id))) // отправляем в POST информацию, что всё прошло ок
 		//fmt.Println(u)
-		s.i++
+		//s.Id++
 		//fmt.Println(s)
+		data, err := json.Marshal(s.Id)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		w.Write(data)
 	}
-	w.WriteHeader(http.StatusBadRequest)
+	//w.WriteHeader(http.StatusBadRequest)// убрал, т.к. писала 2022/01/07 11:11:00 http: superfluous response.WriteHeader call from main.(*service).Create (main.go:75)
 }
 /*
 func (s  *service)GetAll(w http.ResponseWriter, r *http.Request)  {

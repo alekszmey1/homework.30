@@ -2,8 +2,8 @@ POST http://localhost:8080/create
 Content-Type: application/json
 
 {
-  "name": "Maks",
-  "age": 21,
+  "name": "Maks ",
+  "age": 18,
   "friends" : []
 }
 
