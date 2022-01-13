@@ -1,6 +1,7 @@
 package service
 
 import (
+	"homework.30/pkg/repository"
 	"encoding/json"
 	"fmt"
 	"homework.30/pkg/user"
@@ -8,24 +9,8 @@ import (
 	"net/http"
 )
 
-type Service struct {
-	Id int
-	Store map [int] * user.User
-}
-type UserId struct {
-	UserId int
-}
 
-//пробую  добавлять карту в сервис через отдельный метод
-func (s *Service) GetMap(u *user.User)  {
-	for {
-		s.Id++
-		s.Store[s.Id] = u
-		fmt.Printf("Запись %v произведена \n", s.Id)
-		return
-	}
-}
-func (s * Service)  Create (w http.ResponseWriter, r *http.Request)  {
+func (s *repository)  Create (w http.ResponseWriter, r *http.Request)  {
 	if r.Method == "POST" {
 		content, err := ioutil.ReadAll(r.Body) // берем и считываем body (информацию с rest запроса) и заносим в переменную content (срез байтов)
 		if err != nil {
@@ -41,7 +26,7 @@ func (s * Service)  Create (w http.ResponseWriter, r *http.Request)  {
 			w.Write([]byte(err.Error()))
 			return
 		}
-		s.GetMap(&u)
+		s.repository.CreateUser(&u)
 		w.WriteHeader(http.StatusCreated)
 		t := UserId{s.Id}
 		data, err := json.Marshal(t)

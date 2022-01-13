@@ -19,7 +19,7 @@ import (
 
 func main()  {
 	mux := http.NewServeMux()
-	srv := service.Service{Store: map[int]*user.User{}}
+	srv := service.repository{Store: map[int]*user.User{}}
 	mux.HandleFunc("/create", srv.Create)
 //	mux.HandleFunc("/get", srv.GetAll	)
 	http.ListenAndServe("localhost:8080", mux)
