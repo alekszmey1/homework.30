@@ -1,33 +1,26 @@
 package repository
 
 import (
-	"fmt"
-	"homework.30/pkg/user"
+	"homework.30/pkg/entity"
 )
 
+//Определение хранилища, и типы данных, хранящиеся там
 type repository struct {
-	Id        int
-	usersById map [int] * user.User
-}
-type UserId struct {
-	UserId int
+	index     int
+	usersById map[int]*entity.User
 }
 
-//пробую  добавлять карту в сервис через отдельный метод
-func (r *repository) CreateUser (user *user.User)  {
-	for {
-		r.Id++
-		user.Id = r.Id
-		r.usersById[r.Id] = user
-		fmt.Printf("Запись %v произведена \n", r.Id)
-		return
+// Функция создания хранилища
+func NewRepository() *repository {
+	return &repository{
+		usersById: make(map[int]*entity.User),
 	}
 }
 
-func (r *repository)MakeFriends(a, b int,user, user2 *user.User)  {
-	user.Friends[a] = append(friends)
-}
-
-func (r * repository)DeleteUser(id int){
-
+// Метод добавления в хранилище новую сущность
+func (r *repository) CreateUser(user *entity.User) (int, error) {
+	r.index++
+	user.Id = r.index
+	r.usersById[user.Id] = user
+	return user.Id, nil
 }

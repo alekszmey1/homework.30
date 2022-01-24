@@ -1,0 +1,4 @@
+POST http://localhost:8080/create HTTP/1.1
+content-type: application/json
+
+{"name":"Зуек","age":25,"friends":[]}
