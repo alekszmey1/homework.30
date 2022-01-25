@@ -16,3 +16,8 @@ func (u *User) ToString() string {
 func NewUser(name string, age int, friends []int) *User {
 	return nil
 }
+
+type MakeFriends struct {
+	SourceId string `json:"source_id"`
+	TargetId string `json:"target_id"`
+}

@@ -14,6 +14,7 @@ func Run() {
 	controller := controller.NewController(usecase)
 	mux := http.NewServeMux()
 	mux.HandleFunc("/create", controller.CreateUser)
+	mux.HandleFunc("/make_friends", controller.MakeFriends)
 	http.ListenAndServe("localhost:8080", mux)
 }
 

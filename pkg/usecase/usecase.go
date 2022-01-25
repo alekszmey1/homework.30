@@ -7,18 +7,18 @@ import (
 type (
 	Usecase interface {
 		CreateUser(*entity.User) (int, error)
+		MakeFriends(*entity.MakeFriends) (int, int, error)
 		// DeleteUser(int) error
 		// UpdateUser(int, int) error
 		// GetFriends(int) ([]int, error)
-		// MakeFriends(int, int)
 	}
 
 	Repository interface {
 		CreateUser(*entity.User) (int, error)
 		// DeleteUser(int) error
 		// UpdateAge(int, int) error
-		// MakeFriends(int, int) (string, string, error)
-		// GetFriends(int) ([]string, error)
+		MakeFriends(*entity.MakeFriends) (int, int, error)
+		//GetFriends(int) ([]string, error)
 	}
 )
 
@@ -36,4 +36,9 @@ func NewUsecase(repository Repository) *usecase {
 func (u *usecase) CreateUser(user *entity.User) (int, error) {
 	uid, error := u.repository.CreateUser(user)
 	return uid, error
+}
+
+func (u *usecase) MakeFriends(friends *entity.MakeFriends) (a, b int, err error) {
+	a, b, err = u.repository.MakeFriends(friends)
+	return a, b, err
 }
