@@ -2,6 +2,7 @@ package controller
 
 import (
 	"encoding/json"
+	"fmt"
 	"homework.30/pkg/entity"
 	"homework.30/pkg/usecase"
 	"net/http"
@@ -80,6 +81,36 @@ func (c *Controller) DeleteUser(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusBadRequest)
 		}*/
 		result := "user " + id + " удален"
+		response, err := json.Marshal(result)
+		if err != nil {
+			w.Header().Set("Content-Type", "application/json; charset=utf-8")
+			w.WriteHeader(http.StatusInternalServerError)
+		}
+		w.Header().Set("Content-Type", "application/json; charset=utf-8")
+		w.WriteHeader(http.StatusCreated)
+		w.Write(response)
+	}
+}
+
+func (c *Controller) GetFriends(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "GET" {
+		a := &entity.DeleteUser{}
+		err := json.NewDecoder(r.Body).Decode(a)
+		if err != nil {
+			w.Header().Set("Content-Type", "application/json; charset=utf-8")
+			w.WriteHeader(http.StatusBadRequest)
+		}
+		s := a.TargetId
+		b, err := strconv.Atoi(s)
+		if err != nil {
+			fmt.Println("err")
+		}
+		id, err := c.usecase.GetFriends(b)
+		if err != nil {
+			w.Header().Set("Content-Type", "application/json; charset=utf-8")
+			w.WriteHeader(http.StatusBadRequest)
+		}
+		result := id
 		response, err := json.Marshal(result)
 		if err != nil {
 			w.Header().Set("Content-Type", "application/json; charset=utf-8")

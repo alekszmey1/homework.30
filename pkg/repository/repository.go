@@ -66,3 +66,20 @@ func (r *repository) DeleteUser(user *entity.DeleteUser) string {
 	delete(r.usersById, b)
 	return name
 }
+
+func (r *repository) GetFriends(a int) (b []string, err error) {
+	for id, _ := range r.usersById {
+		if id == a {
+			c := r.usersById[id]
+			d := c.Friends
+			for _, idFriends := range d {
+				for id, user := range r.usersById {
+					if idFriends == id {
+						b = append(b, user.Name)
+					}
+				}
+			}
+		}
+	}
+	return b, nil
+}

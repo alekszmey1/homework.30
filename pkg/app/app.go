@@ -16,6 +16,7 @@ func Run() {
 	mux.HandleFunc("/create", controller.CreateUser)
 	mux.HandleFunc("/make_friends", controller.MakeFriends)
 	mux.HandleFunc("/delete", controller.DeleteUser)
+	mux.HandleFunc("/get_friends", controller.GetFriends)
 	http.ListenAndServe("localhost:8080", mux)
 }
 
