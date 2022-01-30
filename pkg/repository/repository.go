@@ -39,11 +39,8 @@ func (r *repository) MakeFriends(friends *entity.MakeFriends) (a int, b int, err
 }
 
 func makeFriends(s string) (int, error) {
-	a, err := strconv.Atoi(s)
-	if err != nil {
-		fmt.Println("err")
-	}
-	return a, err
+	a := stringToInt(s)
+	return a, nil
 }
 
 func (r *repository) DeleteUser(user *entity.DeleteUser) string {
@@ -82,4 +79,24 @@ func (r *repository) GetFriends(a int) (b []string, err error) {
 		}
 	}
 	return b, nil
+}
+
+func (r *repository) UpdateAge(user *entity.UpdateUser) string {
+	for id, _ := range r.usersById {
+		i := stringToInt(user.Target)
+		if id == i {
+			c := r.usersById[id]
+			i2 := stringToInt(user.NewAge)
+			c.Age = i2
+		}
+	}
+	return "возраст пользователя успешно обновлен"
+}
+
+func stringToInt(s string) int {
+	i, err := strconv.Atoi(s)
+	if err != nil {
+		fmt.Println("err")
+	}
+	return i
 }

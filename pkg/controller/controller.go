@@ -121,3 +121,28 @@ func (c *Controller) GetFriends(w http.ResponseWriter, r *http.Request) {
 		w.Write(response)
 	}
 }
+
+func (c *Controller) UpdateAge(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "PUT" {
+		a := &entity.UpdateUser{}
+		err := json.NewDecoder(r.Body).Decode(a)
+		if err != nil {
+			w.Header().Set("Content-Type", "application/json; charset=utf-8")
+			w.WriteHeader(http.StatusBadRequest)
+		}
+		id := c.usecase.UpdateAge(a)
+		if err != nil {
+			w.Header().Set("Content-Type", "application/json; charset=utf-8")
+			w.WriteHeader(http.StatusBadRequest)
+		}
+		result := id
+		response, err := json.Marshal(result)
+		if err != nil {
+			w.Header().Set("Content-Type", "application/json; charset=utf-8")
+			w.WriteHeader(http.StatusInternalServerError)
+		}
+		w.Header().Set("Content-Type", "application/json; charset=utf-8")
+		w.WriteHeader(http.StatusCreated)
+		w.Write(response)
+	}
+}

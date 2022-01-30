@@ -9,14 +9,14 @@ type (
 		CreateUser(*entity.User) (int, error)
 		MakeFriends(*entity.MakeFriends) (int, int, error)
 		DeleteUser(user *entity.DeleteUser) string
-		//UpdateUser(int, int) error
+		UpdateAge(user *entity.UpdateUser) string
 		GetFriends(int) ([]string, error)
 	}
 
 	Repository interface {
 		CreateUser(*entity.User) (int, error)
 		DeleteUser(user *entity.DeleteUser) string
-		// UpdateAge(int, int) error
+		UpdateAge(user *entity.UpdateUser) string
 		MakeFriends(*entity.MakeFriends) (int, int, error)
 		GetFriends(int) ([]string, error)
 	}
@@ -50,4 +50,9 @@ func (u *usecase) DeleteUser(user *entity.DeleteUser) string {
 func (u *usecase) GetFriends(a int) (b []string, err error) {
 	b, err = u.repository.GetFriends(a)
 	return b, err
+}
+
+func (u *usecase) UpdateAge(user *entity.UpdateUser) string {
+	s := u.repository.UpdateAge(user)
+	return s
 }

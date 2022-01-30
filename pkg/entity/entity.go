@@ -25,3 +25,8 @@ type MakeFriends struct {
 type DeleteUser struct {
 	TargetId string `json:"target_id"`
 }
+
+type UpdateUser struct {
+	Target string `json:"target_id"`
+	NewAge string `json:"new_age"`
+}
